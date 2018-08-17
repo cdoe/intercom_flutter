@@ -1,4 +1,8 @@
-## 0.0.4
+# 0.0.5
+
+* Deprecated in favour of `intercom_flutter` package
+
+# 0.0.4
 
 * Fixed pod name in podspec
 
