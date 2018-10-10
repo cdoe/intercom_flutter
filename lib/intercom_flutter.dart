@@ -19,7 +19,7 @@ class Intercom {
     });
   }
 
-  static Future<dynamic> registerIdentifiedUser(String userId) {
+  static Future<dynamic> registerIdentifiedUser(String? userId) {
     return _channel.invokeMethod('registerIdentifiedUser', {'userId': userId});
   }
 
