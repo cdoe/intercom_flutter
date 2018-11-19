@@ -8,8 +8,25 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.intercom.android.sdk.Company
 import io.intercom.android.sdk.Intercom
+import io.intercom.android.sdk.push.IntercomPushClient
 import io.intercom.android.sdk.UserAttributes
 import io.intercom.android.sdk.identity.Registration
+import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
+import com.google.firebase.iid.FirebaseInstanceId
+
+class IntercomFcm : FirebaseMessagingService() {
+  override fun onMessageReceived(remoteMessage: RemoteMessage?) {
+    val intercomPushClient = IntercomPushClient();
+    super.onMessageReceived(remoteMessage)
+    if(remoteMessage != null){
+      val message = remoteMessage.getData();
+      if (intercomPushClient.isIntercomPush(message)) {
+        intercomPushClient.handlePush(getApplication(), message);
+      }
+    }
+  }
+}
 
 class IntercomFlutterPlugin(private val application: Application) : MethodCallHandler {
   companion object {
@@ -26,7 +43,13 @@ class IntercomFlutterPlugin(private val application: Application) : MethodCallHa
         val apiKey = call.argument<String>("androidApiKey")
         val appId = call.argument<String>("appId")
         Intercom.initialize(application, apiKey, appId)
-        result.success("Intercom initialized")
+        val fcmToken = FirebaseInstanceId.getInstance().token
+        if(fcmToken != null){
+          IntercomPushClient().sendTokenToIntercom(application, fcmToken)
+          result.success("Intercom initialized with FCM")
+        } else {
+          result.success("Intercom initialized")
+        }
       }
       call.method == "registerIdentifiedUser" -> {
         val userId = call.argument<String>("userId")
