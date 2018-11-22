@@ -58,6 +58,11 @@ class Intercom {
         'setLauncherVisibility', {'visibility': visibilityString});
   }
 
+  static Future<dynamic> setBottomPadding(int bottomPadding) {
+    return _channel
+        .invokeMethod('setBottomPadding', {'bottomPadding': bottomPadding});
+  }
+
   static Future<dynamic> displayMessenger() {
     return _channel.invokeMethod('displayMessenger');
   }

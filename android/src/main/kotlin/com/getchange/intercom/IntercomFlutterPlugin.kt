@@ -74,6 +74,13 @@ class IntercomFlutterPlugin(private val application: Application) : MethodCallHa
           result.success("Showing launcher")
         }
       }
+      call.method == "setBottomPadding" -> {
+        val bottomPadding = call.argument<Int>("bottomPadding")
+        if(bottomPadding != null) {
+          Intercom.client().setBottomPadding(bottomPadding)
+          result.success("Set bottom padding")
+        }
+      }
       call.method == "displayMessenger" -> {
         Intercom.client().displayMessenger()
         result.success("Launched")

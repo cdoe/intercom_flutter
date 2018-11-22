@@ -31,6 +31,11 @@
         [Intercom setLauncherVisible:[@"VISIBLE" isEqualToString:visibility]];
         result(@"Setting launcher visibility");
     }
+    else if([@"setBottomPadding" isEqualToString:call.method]) {
+        NSNumber *bottomPadding = call.arguments[@"bottomPadding"];
+        [Intercom setBottomPadding: [bottomPadding doubleValue]];
+        result(@"Setting bottom padding");
+    }
     else if([@"displayMessenger" isEqualToString:call.method]) {
         [Intercom presentMessenger];
         result(@"Presented messenger");
